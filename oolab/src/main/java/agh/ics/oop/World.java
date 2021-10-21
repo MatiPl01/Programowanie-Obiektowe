@@ -2,21 +2,35 @@
  * Java stream API - explanation: https://www.youtube.com/watch?v=q4s0aE3FnCA
  */
 package agh.ics.oop;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Map;
 
 
 public class World {
     public static void main(String[] args) {
-        System.out.println("Start");
+        // Vector2D class tests
+        Vector2D position1 = new Vector2D(1,2);
+        System.out.println(position1);
+        Vector2D position2 = new Vector2D(-2,1);
+        System.out.println(position2);
+        System.out.println(position1.add(position2));
 
-        run(Arrays.stream(args)
-                .map(World::convert_direction)
-                .collect(Collectors.toList())
-        );
+        // MapDirection enum tests
+        MapDirection north = MapDirection.NORTH;
+        System.out.println(north);
+        System.out.println(north.next());
+        System.out.println(north.previous());
+        System.out.println(north.previous().next());
+        System.out.println(north.previous().previous());
+        System.out.println(north.previous().previous().previous().previous());
 
-        System.out.println("Stop");
+        System.out.println(north.toUnitVector());
+        System.out.println(MapDirection.EAST.toUnitVector());
+        System.out.println(MapDirection.SOUTH.toUnitVector());
+        System.out.println(MapDirection.WEST.toUnitVector());
+
+        // Tests
+
     }
 
     public static void run(List<Direction> directions) {
@@ -39,7 +53,7 @@ public class World {
             case "b" -> Direction.BACKWARD;
             case "l" -> Direction.LEFT;
             case "r" -> Direction.RIGHT;
-            default -> throw new Error("Wrong direction");
+            default  -> throw new Error("Wrong direction");
         };
     }
 }
