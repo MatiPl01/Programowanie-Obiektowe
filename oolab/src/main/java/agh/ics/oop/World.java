@@ -30,7 +30,7 @@ public class World {
             case LEFT     -> System.out.println("Zwierzak skręca w lewo");
             case RIGHT    -> System.out.println("Zwierzak skręca w prawo");
             default       -> System.out.println("Nieprawidłowy kierunek");
-        };
+        }
     }
 
     private static Direction convert_direction(String dir) {

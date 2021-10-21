@@ -19,4 +19,4 @@ test {
     useJUnitPlatform()
 }
 
-//application { mainClassName = 'agh.ics.oop.World' }
+application { mainClassName = 'agh.ics.oop.World' }
