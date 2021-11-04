@@ -8,6 +8,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.ArrayList;
 
 public class AnimalTest {
+    private static final IWorldMap map = new RectangularMap(5, 5);
+
     @Test
     public void testParser() {
         String[] input = "f something f f BACKwarD :) r RIGht rights l b null :P LEFT".split(" ");
@@ -23,10 +25,10 @@ public class AnimalTest {
             MoveDirection.LEFT,
         };
 
-        ArrayList<MoveDirection> parsed = OptionsParser.parse(input);
-        assertEquals(parsed.size(), expected.length);
+        MoveDirection[] parsed = OptionsParser.parse(input);
+        assertEquals(parsed.length, expected.length);
         for (int i = 0; i < expected.length; i++) {
-            assertEquals(expected[i], parsed.get(i));
+            assertEquals(expected[i], parsed[i]);
         }
     }
 
@@ -48,12 +50,12 @@ public class AnimalTest {
             MapDirection.WEST
         };
 
-        ArrayList<MoveDirection> parsed = OptionsParser.parse(input);
-        Animal animal = new Animal();
+        MoveDirection[] parsed = OptionsParser.parse(input);
+        Animal animal = new Animal(map);
 
         for (int i = 0; i < expected.length; i++) {
-            animal.move(parsed.get(i));
-            assertEquals(animal.orientation, expected[i]);
+            animal.move(parsed[i]);
+            assertEquals(animal.getOrientation(), expected[i]);
         }
     }
 
@@ -75,25 +77,25 @@ public class AnimalTest {
             "(0, 3)"
         };
 
-        ArrayList<MoveDirection> parsed = OptionsParser.parse(input);
-        Animal animal = new Animal();
+        MoveDirection[] parsed = OptionsParser.parse(input);
+        Animal animal = new Animal(map, new Vector2D(2, 2));
 
         for (int i = 0; i < expected.length; i++) {
-            animal.move(parsed.get(i));
-            assertEquals(animal.currPosition.toString(), expected[i]);
+            animal.move(parsed[i]);
+            assertEquals(animal.getPosition().toString(), expected[i]);
         }
     }
 
     @Test
     public void testIfInMap() {
         ArrayList<String> moves = randomMoves(10000);
-        ArrayList<MoveDirection> parsed = OptionsParser.parse(moves.toArray(new String[0]));
-        Animal animal = new Animal();
+        MoveDirection[] parsed = OptionsParser.parse(moves.toArray(new String[0]));
+        Animal animal = new Animal(map);
 
         for (MoveDirection moveDirection : parsed) {
 //            System.out.println("test: " + moveDirection);
             animal.move(moveDirection);
-            Vector2D pos = animal.currPosition;
+            Vector2D pos = animal.getPosition();
             assertTrue(pos.x >= 0 && pos.x <= 4 && pos.y >= 0 && pos.y <= 4);
         }
     }

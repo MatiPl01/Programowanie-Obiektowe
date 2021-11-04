@@ -3,13 +3,14 @@ package agh.ics.oop;
 import java.util.ArrayList;
 
 public class OptionsParser {
-    public static ArrayList<MoveDirection> parse(String[] directions) {
+    public static MoveDirection[] parse(String[] directions) {
         ArrayList<MoveDirection> parsedDirections = new ArrayList<>();
         for (String direction: directions) {
             MoveDirection parsedDirection = parseDirection(direction);
             if (parsedDirection != null) parsedDirections.add(parsedDirection);
         }
-        return parsedDirections;
+        return parsedDirections.toArray(new MoveDirection[0]); // IMPORTANT - how to cast ArrayList to Array
+                                                               // (We have to provide one element of the specified type)
     }
 
     public static MoveDirection parseDirection(String direction) {

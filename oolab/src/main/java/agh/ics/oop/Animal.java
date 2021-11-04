@@ -1,11 +1,35 @@
 package agh.ics.oop;
 
 public class Animal {
-    MapDirection orientation = MapDirection.NORTH;
-    Vector2D currPosition = new Vector2D(2, 2);
+    private MapDirection orientation = MapDirection.NORTH;
+    private Vector2D currPosition;
+    private final IWorldMap map;
+
+    public Animal(IWorldMap map) {
+        this.map = map;
+        currPosition = new Vector2D(0, 0);
+    }
+
+    public Animal(IWorldMap map, Vector2D initialPosition) {
+        this.map = map;
+        currPosition = initialPosition;
+    }
+
+    public Vector2D getPosition() {
+        return currPosition;
+    }
+
+    public MapDirection getOrientation() {
+        return orientation;
+    }
 
     public String toString() {
-        return currPosition + " - " + orientation;
+        return switch(orientation) {
+            case NORTH -> "N";
+            case SOUTH -> "S";
+            case EAST -> "E";
+            case WEST -> "W";
+        };
     }
 
     public boolean isAt(Vector2D position) {
@@ -16,23 +40,16 @@ public class Animal {
         Vector2D newPosition;
 
         switch (direction) {
-            case RIGHT:
-                orientation = orientation.next();
-                break;
-            case LEFT:
-                orientation = orientation.previous();
-                break;
-            case FORWARD:
+            case RIGHT -> orientation = orientation.next();
+            case LEFT -> orientation = orientation.previous();
+            case FORWARD -> {
                 newPosition = currPosition.add(orientation.toUnitVector());
-                if (isOnMap(newPosition)) currPosition = newPosition;
-                break;
-            case BACKWARD:
+                if (map.canMoveTo(newPosition)) currPosition = newPosition;
+            }
+            case BACKWARD -> {
                 newPosition = currPosition.subtract(orientation.toUnitVector());
-                if (isOnMap(newPosition)) currPosition = newPosition;
+                if (map.canMoveTo(newPosition)) currPosition = newPosition;
+            }
         }
-    }
-
-    public static boolean isOnMap(Vector2D position) {
-        return (position.follows(World.bottomLeftVector) && position.precedes(World.topRightVector));
     }
 }
