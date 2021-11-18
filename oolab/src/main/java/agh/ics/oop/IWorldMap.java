@@ -24,7 +24,7 @@ public interface IWorldMap {
      *            The animal to place on the map.
      * @return True if the animal was placed. The animal cannot be placed if the map is already occupied.
      */
-    boolean place(Animal animal);
+    boolean place(IMapElement animal);
 
     /**
      * Return true if given position on the map is occupied. Should not be
@@ -45,4 +45,14 @@ public interface IWorldMap {
      * @return Object or null if the position is not occupied.
      */
     Object objectAt(Vector2D position);
+
+    /**
+     * Update animal position on the map.
+     *
+     * @param prevPosition
+     *            The position which the animal previously occupied.
+     * @param animal
+     *            The animal with updated (new) position.
+     */
+    void updateAnimalPosition(Vector2D prevPosition, Animal animal);
 }

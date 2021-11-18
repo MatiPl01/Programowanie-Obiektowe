@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class AnimalsOnMapTest {
+public class AnimalOnMapTest {
     @Test
     public void testMoves() {
         MoveDirection[] directions = OptionsParser.parse("f b r l f f r r f f f f f f f f".split(" "));

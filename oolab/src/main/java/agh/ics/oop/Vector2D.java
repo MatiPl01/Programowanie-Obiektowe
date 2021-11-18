@@ -50,4 +50,12 @@ public class Vector2D {
     public Vector2D opposite() {
         return new Vector2D(-this.x, -this.y);
     }
+
+    public static Vector2D randomVector(int maxX, int maxY) {
+        return new Vector2D(randomInt(maxX), randomInt(maxY));
+    }
+
+    private static int randomInt(int n) {
+        return (int) (Math.random() * (n + 1));
+    }
 }

@@ -7,7 +7,7 @@ public class RectangularMap implements IWorldMap {
     private final Vector2D upperRight;
     MapVisualizer mapVisualizer = new MapVisualizer(this);
 
-    private final LinkedList<Animal> animals = new LinkedList<>();
+    private final LinkedList<IMapElement> animals = new LinkedList<>();
 
     RectangularMap(int width, int height) {
         this.lowerLeft = new Vector2D(0, 0);
@@ -20,7 +20,7 @@ public class RectangularMap implements IWorldMap {
     }
 
     @Override
-    public boolean place(Animal animal) {
+    public boolean place(IMapElement animal) {
         if (isOccupied(animal.getPosition())) return false;
         animals.add(animal);
         return true;
@@ -33,10 +33,15 @@ public class RectangularMap implements IWorldMap {
 
     @Override
     public Object objectAt(Vector2D position) {
-        for (Animal animal: animals) {
+        for (IMapElement animal: animals) {
             if (animal.isAt(position)) return animal;
         }
         return null;
+    }
+
+    @Override
+    public void updateAnimalPosition(Vector2D prevPosition, Animal animal) {
+        // We don't have to update animal's position in this implementation.
     }
 
     public String toString() {
