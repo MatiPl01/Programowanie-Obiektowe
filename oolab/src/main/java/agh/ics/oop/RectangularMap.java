@@ -12,7 +12,7 @@ public class RectangularMap extends AbstractWorldMap {
 
     @Override
     public boolean place(IMapElement animal) {
-        if (isOccupied(animal.getPosition())) return false;
+        if (!canMoveTo(animal.getPosition())) return false;
         animals.add(animal);
         return true;
     }
