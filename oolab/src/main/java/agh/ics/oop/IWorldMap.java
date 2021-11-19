@@ -49,10 +49,10 @@ public interface IWorldMap {
     /**
      * Update animal position on the map.
      *
-     * @param prevPosition
-     *            The position which the animal previously occupied.
      * @param animal
-     *            The animal with updated (new) position.
+     *            An animal object to be moved.
+     * @param move
+     *            Move direction.
      */
-    void updateAnimalPosition(Vector2D prevPosition, Animal animal);
+    void moveAnimal(Animal animal, MoveDirection move);
 }

@@ -3,27 +3,17 @@ package agh.ics.oop;
 import java.util.HashMap;
 import java.util.Map;
 
-public class GrassField implements IWorldMap {
-    MapVisualizer mapVisualizer = new MapVisualizer(this);
-
+public class GrassField extends AbstractWorldMap {
     private final int fieldsCount;
+    public final Map<String, IMapElement> mapElements = new HashMap<>();
+
     private static final Vector2D lowerLeftBound  = new Vector2D(0, 0);
     private static final Vector2D upperRightBound = new Vector2D(Integer.MAX_VALUE, Integer.MAX_VALUE);
-
-    private static Vector2D lowerLeft;
-    private static Vector2D upperRight;
-
-    public final Map<String, IMapElement> mapElements = new HashMap<>();
 
     public GrassField(int fieldsCount) {
         if (fieldsCount <= 0) throw new Error("Number of grass fields should be a non-zero natural number");
         this.fieldsCount = fieldsCount;
         spawnGrass();
-    }
-
-    @Override
-    public boolean canMoveTo(Vector2D position) {
-        return (isOnMap(position) && !(objectAt(position) instanceof Animal));
     }
 
     @Override
@@ -51,15 +41,15 @@ public class GrassField implements IWorldMap {
     }
 
     @Override
-    public void updateAnimalPosition(Vector2D prevPosition, Animal animal) {
-        mapElements.remove(prevPosition.toString());
-        mapElements.put(animal.getPosition().toString(), animal);
-        updateMapBounds(animal.getPosition());
-    }
-
-    public String toString() {
-        System.out.println(mapElements);
-        return mapVisualizer.draw(lowerLeft, upperRight);
+    public void moveAnimal(Animal animal, MoveDirection move) {
+        Vector2D prevPosition = animal.getPosition();
+        animal.move(move);
+        Vector2D currPosition = animal.getPosition();
+        // Update animal position in the mapElements HashMap if an animal was moved
+        if (!currPosition.equals(prevPosition)) {
+            mapElements.remove(prevPosition.toString());
+            mapElements.put(currPosition.toString(), animal);
+        }
     }
 
     private void spawnGrass() {
@@ -86,7 +76,7 @@ public class GrassField implements IWorldMap {
         return position;
     }
 
-    private boolean isOnMap(Vector2D position) {
+    protected boolean isOnMap(Vector2D position) {
         return position.follows(lowerLeftBound) && position.precedes(upperRightBound);
     }
 }

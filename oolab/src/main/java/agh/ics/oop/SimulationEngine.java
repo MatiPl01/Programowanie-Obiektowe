@@ -33,9 +33,7 @@ public class SimulationEngine implements IEngine {
             if (j == 0) System.out.println(map);
             System.out.println("[j=" + j +  "] Moving animal: " + animal + " (" + animal.getPosition() + "). Move: " + moves[i]);
 
-            Vector2D prevPosition = animal.getPosition();
-            animal.move(moves[i]);
-            map.updateAnimalPosition(prevPosition, animal);
+            map.moveAnimal(animal, moves[i]);
         }
     }
 }

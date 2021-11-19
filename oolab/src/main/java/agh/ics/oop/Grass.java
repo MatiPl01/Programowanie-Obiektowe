@@ -17,9 +17,4 @@ public class Grass implements IMapElement {
     public String toString() {
         return sign;
     }
-
-    @Override
-    public boolean isAt(Vector2D position) {
-        return this.position.equals(position);
-    }
 }

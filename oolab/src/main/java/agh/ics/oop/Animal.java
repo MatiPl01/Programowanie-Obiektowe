@@ -2,21 +2,21 @@ package agh.ics.oop;
 
 public class Animal implements IMapElement {
     private MapDirection orientation = MapDirection.NORTH;
-    private Vector2D currPosition;
+    private Vector2D position;
     private final IWorldMap map;
 
     public Animal(IWorldMap map) {
         this.map = map;
-        currPosition = new Vector2D(0, 0);
+        position = new Vector2D(0, 0);
     }
 
     public Animal(IWorldMap map, Vector2D initialPosition) {
         this.map = map;
-        currPosition = initialPosition;
+        position = initialPosition;
     }
 
     public Vector2D getPosition() {
-        return currPosition;
+        return position;
     }
 
     public MapDirection getOrientation() {
@@ -33,7 +33,7 @@ public class Animal implements IMapElement {
     }
 
     public boolean isAt(Vector2D position) {
-        return currPosition.equals(position);
+        return this.position.equals(position);
     }
 
     public void move(MoveDirection direction) {
@@ -43,12 +43,12 @@ public class Animal implements IMapElement {
             case RIGHT -> orientation = orientation.next();
             case LEFT -> orientation = orientation.previous();
             case FORWARD -> {
-                newPosition = currPosition.add(orientation.toUnitVector());
-                if (map.canMoveTo(newPosition)) currPosition = newPosition;
+                newPosition = position.add(orientation.toUnitVector());
+                if (map.canMoveTo(newPosition)) position = newPosition;
             }
             case BACKWARD -> {
-                newPosition = currPosition.subtract(orientation.toUnitVector());
-                if (map.canMoveTo(newPosition)) currPosition = newPosition;
+                newPosition = position.subtract(orientation.toUnitVector());
+                if (map.canMoveTo(newPosition)) position = newPosition;
             }
         }
     }

@@ -73,7 +73,6 @@ public class MapVisualizer {
         String result;
         if (this.map.isOccupied(currentPosition)) {
             Object object = this.map.objectAt(currentPosition);
-            System.out.println("object:" + object);
 
             if (object != null) {
                 result = object.toString();
