@@ -11,7 +11,7 @@ public class World {
                 new Vector2D(10, 4),
                 new Vector2D(5, 7),
                 new Vector2D(3, 4), // This one won't be added
-                new Vector2D(-5, 3) // This won't be added too
+                new Vector2D(-5, 3) // This one won't be added too
         };
         IEngine engine = new SimulationEngine(directions, map, positions);
         engine.run();

@@ -87,22 +87,22 @@ public class RectangularMapTest {
         map.place(animal1);
         map.place(animal2);
 
-        map.moveAnimal(animal1, MoveDirection.FORWARD);
+        animal1.move(MoveDirection.FORWARD);
         assertEquals(new Vector2D(1, 1), animal1.getPosition());
-        map.moveAnimal(animal2, MoveDirection.BACKWARD);
+        animal2.move(MoveDirection.BACKWARD);
         assertEquals(new Vector2D(1, 2), animal2.getPosition());
 
-        map.moveAnimal(animal1, MoveDirection.RIGHT);
-        map.moveAnimal(animal1, MoveDirection.FORWARD);
+        animal1.move(MoveDirection.RIGHT);
+        animal1.move(MoveDirection.FORWARD);
         assertEquals(new Vector2D(2, 1), animal1.getPosition());
 
-        map.moveAnimal(animal2, MoveDirection.LEFT);
-        map.moveAnimal(animal2, MoveDirection.BACKWARD);
+        animal2.move(MoveDirection.LEFT);
+        animal2.move(MoveDirection.BACKWARD);
         assertEquals(new Vector2D(2, 2), animal2.getPosition());
 
         for (int i = 0; i < 100; i++) {
-            map.moveAnimal(animal1, MoveDirection.BACKWARD);
-            map.moveAnimal(animal2, MoveDirection.BACKWARD);
+            animal1.move(MoveDirection.BACKWARD);
+            animal2.move(MoveDirection.BACKWARD);
         }
 
         assertEquals(new Vector2D(0, 1), animal1.getPosition());

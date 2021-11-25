@@ -25,6 +25,7 @@ public class SimulationEngine implements IEngine {
     @Override
     public void run() {
         addAnimalsToMap();
+
         int j;
         for (int i = 0; i < moves.length; i++) {
             j = i % animals.size();
@@ -33,7 +34,7 @@ public class SimulationEngine implements IEngine {
             if (j == 0) System.out.println(map);
             System.out.println("[j=" + j +  "] Moving animal: " + animal + " (" + animal.getPosition() + "). Move: " + moves[i]);
 
-            map.moveAnimal(animal, moves[i]);
+            animal.move(moves[i]);
         }
     }
 }

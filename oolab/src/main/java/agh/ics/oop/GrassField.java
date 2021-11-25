@@ -1,12 +1,8 @@
 package agh.ics.oop;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class GrassField extends AbstractWorldMap {
     private final int fieldsCount;
     private final int maxFieldIndex;
-    public final Map<String, IMapElement> mapElements = new HashMap<>();
 
     private static final Vector2D lowerLeftBound  = new Vector2D(0, 0);
     private static final Vector2D upperRightBound = new Vector2D(Integer.MAX_VALUE, Integer.MAX_VALUE);
@@ -21,55 +17,20 @@ public class GrassField extends AbstractWorldMap {
     @Override
     public boolean place(IMapElement element) {
         Vector2D position = element.getPosition();
-        if ((!isOccupied(position) || element instanceof Animal) && canMoveTo(position)) {
-            // Add an object to the map
-            mapElements.put(position.toString(), element);
-            // Update map bounds
-            updateMapBounds(position);
-            return true;
-        }
-        return false;
+        // Check if an element will override a Grass object
+        boolean overrodeGrass = objectAt(position) instanceof Grass;
+        // Check if an element was placed
+        boolean isPlaced = super.place(element);
+        // Update map bounds
+        if (isPlaced) updateMapBounds(element.getPosition());
+        // Respawn a Grass object if it was overridden
+        if (overrodeGrass) spawnSingleGrass();
+        return isPlaced;
     }
 
     @Override
-    public boolean isOccupied(Vector2D position) {
-        return mapElements.containsKey(position.toString());
-    }
-
-    @Override
-    public Object objectAt(Vector2D position) {
-        return mapElements.get(position.toString());
-    }
-
-    @Override
-    public void moveAnimal(Animal animal, MoveDirection move) {
-        Vector2D prevPosition = animal.getPosition();
-        animal.move(move);
-        Vector2D currPosition = animal.getPosition();
-        // Update animal position in the mapElements HashMap if an animal was moved
-        // (When animal encounters a grass field, a grass field in a HashMap will be overwritten,
-        // so a grass will disappear from this field. We will respawn randomly this field of grass)
-        boolean isGrass = false;
-        if (!currPosition.equals(prevPosition)) {
-            mapElements.remove(prevPosition.toString());
-            isGrass = objectAt(animal.getPosition()) instanceof Grass;
-            mapElements.put(currPosition.toString(), animal);
-        }
-        // Respawn a grass field if an animal went into the field with grass
-        if (isGrass) {
-            Vector2D position = getNextEmptyField(maxFieldIndex, maxFieldIndex);
-            place(new Grass(position));
-        }
-    }
-
-    private void spawnGrass() {
-        // Add the first grass field to the map and update map bounds
-        IMapElement grass = new Grass(getNextEmptyField(maxFieldIndex, maxFieldIndex));
-        Vector2D grassPosition = grass.getPosition();
-        lowerLeft = upperRight = grassPosition;
-        mapElements.put(grassPosition.toString(), grass);
-        // Add the remaining grass elements to the map
-        for (int i = 1; i < fieldsCount; i++) place(new Grass(getNextEmptyField(maxFieldIndex, maxFieldIndex)));
+    protected boolean isOnMap(Vector2D position) {
+        return position.follows(lowerLeftBound) && position.precedes(upperRightBound);
     }
 
     private void updateMapBounds(Vector2D position) {
@@ -85,7 +46,17 @@ public class GrassField extends AbstractWorldMap {
         return position;
     }
 
-    protected boolean isOnMap(Vector2D position) {
-        return position.follows(lowerLeftBound) && position.precedes(upperRightBound);
+    private void spawnGrass() {
+        // Add the first grass field to the map and update map bounds
+        IMapElement initialGrass = new Grass(getNextEmptyField(maxFieldIndex, maxFieldIndex));
+        lowerLeft = upperRight = initialGrass.getPosition();
+        place(initialGrass);
+        // Add the remaining grass elements to the map
+        for (int i = 1; i < fieldsCount; i++) spawnSingleGrass();
+    }
+
+    private void spawnSingleGrass() {
+        IMapElement grass = new Grass(getNextEmptyField(maxFieldIndex, maxFieldIndex));
+        place(grass);
     }
 }
