@@ -13,13 +13,13 @@ public class OptionsParser {
                                                                // (We have to provide one element of the specified type)
     }
 
-    public static MoveDirection parseDirection(String direction) {
+    public static MoveDirection parseDirection(String direction) throws IllegalArgumentException {
         return switch (direction.toLowerCase()) {
             case "f", "forward" -> MoveDirection.FORWARD;
             case "b", "backward" -> MoveDirection.BACKWARD;
             case "r", "right" -> MoveDirection.RIGHT;
             case "l", "left" -> MoveDirection.LEFT;
-            default -> null;
+            default -> throw new IllegalArgumentException(direction + " is not valid direction specification");
         };
     }
 }

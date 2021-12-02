@@ -22,15 +22,13 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
         return (isOnMap(position) && !(objectAt(position) instanceof Animal));
     }
 
-    public boolean place(IMapElement element) {
+    public void place(IMapElement element) throws IllegalArgumentException {
         Vector2D position = element.getPosition();
 
         if ((!isOccupied(position) || element instanceof Animal) && canMoveTo(position)) {
             // Add an object to the map
             mapElements.put(position, element);
-            return true;
-        }
-        return false;
+        } else throw new IllegalArgumentException(element + " (" + element.getClass() + ") cannot be placed on position" + position);
     }
 
     public boolean isOccupied(Vector2D position) {
@@ -45,6 +43,7 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
         return mapElements.remove(position);
     }
 
+    @Override
     public void positionChanged(Vector2D oldPosition, Vector2D newPosition) {
         // Remove a map element from the old position
         IMapElement movedElement = remove(oldPosition);
