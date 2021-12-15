@@ -32,6 +32,10 @@ public class Vector2D {
         return "(" + this.x + ", " + this.y + ")";
     }
 
+    public int getX() { return x; }
+
+    public int getY() { return y; }
+
     public boolean precedes(Vector2D other) {
         return this.x <= other.x && this.y <= other.y;
     }

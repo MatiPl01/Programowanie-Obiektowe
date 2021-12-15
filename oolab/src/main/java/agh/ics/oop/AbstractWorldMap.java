@@ -1,6 +1,8 @@
 package agh.ics.oop;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObserver {
@@ -16,6 +18,22 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
 
     public String toString() {
         return mapVisualizer.draw(lowerLeft, upperRight);
+    }
+
+    public Vector2D getLowerLeft() {
+        return lowerLeft;
+    }
+
+    public Vector2D getUpperRight() {
+        return upperRight;
+    }
+
+    public List<Pair<Vector2D, String>> getMapElements() {
+        List<Pair<Vector2D, String>> elementsList = new ArrayList<>();
+        for (Vector2D key: mapElements.keySet()) {
+            elementsList.add(new Pair<>(key, mapElements.get(key).toString()));
+        }
+        return elementsList;
     }
 
     public boolean canMoveTo(Vector2D position) {

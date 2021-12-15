@@ -1,7 +1,6 @@
 package agh.ics.oop;
 
 public class GrassField extends AbstractWorldMap {
-    private int grassCount;
     private int elementsCount = 0;
     private final int maxGrassFieldIndex;
 
@@ -12,7 +11,6 @@ public class GrassField extends AbstractWorldMap {
 
     public GrassField(int grassCount) {
         if (grassCount <= 0) throw new Error("Number of grass fields should be a non-zero natural number");
-        this.grassCount = grassCount;
         this.maxGrassFieldIndex = Math.min((int) Math.sqrt(grassCount * 10), Integer.MAX_VALUE);
         spawnGrass();
     }
