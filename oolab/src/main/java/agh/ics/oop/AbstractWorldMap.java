@@ -1,9 +1,6 @@
 package agh.ics.oop;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObserver {
     protected Vector2D lowerLeft;
@@ -11,6 +8,7 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
 
     protected final MapVisualizer mapVisualizer;
     protected final Map<Vector2D, IMapElement> mapElements = new HashMap<>();
+    protected Set<IMapElement> newMapElements = new HashSet<>();
 
     public AbstractWorldMap() {
         this.mapVisualizer = new MapVisualizer(this);
@@ -28,37 +26,18 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
         return upperRight;
     }
 
-    public List<IMapElement> getMapElements() {
-        List<IMapElement> elementsList = new ArrayList<>();
-        for (Vector2D key: mapElements.keySet()) {
-            elementsList.add(mapElements.get(key));
-        }
-        return elementsList;
+    // This method ensures that each map element will be returned only once
+    @Override
+    public Set<IMapElement> getNewMapElements() {
+        Set<IMapElement> returnedSet = newMapElements;
+        newMapElements = new HashSet<>();
+        return returnedSet;
     }
 
-    public boolean canMoveTo(Vector2D position) {
-        return (isOnMap(position) && !(objectAt(position) instanceof Animal));
-    }
-
-    public void place(IMapElement element) throws IllegalArgumentException {
-        Vector2D position = element.getPosition();
-
-        if ((!isOccupied(position) || element instanceof Animal) && canMoveTo(position)) {
-            // Add an object to the map
-            mapElements.put(position, element);
-        } else throw new IllegalArgumentException(element + " (" + element.getClass() + ") cannot be placed on position" + position);
-    }
-
-    public boolean isOccupied(Vector2D position) {
-        return mapElements.containsKey(position);
-    }
-
-    public IMapElement objectAt(Vector2D position) {
-        return mapElements.get(position);
-    }
-
-    public IMapElement remove(Vector2D position) {
-        return mapElements.remove(position);
+    @Override
+    public void placeNewMapElement(IMapElement element) {
+        newMapElements.add(element);
+        place(element);
     }
 
     @Override
@@ -69,6 +48,33 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
         // a newPosition is not null. If it is null, an element should
         // not be added as it was removed from a map
         if (newPosition != null) place(movedElement);
+    }
+
+    @Override
+    public void place(IMapElement element) throws IllegalArgumentException {
+        Vector2D position = element.getPosition();
+
+        if ((!isOccupied(position) || element instanceof Animal) && canMoveTo(position)) {
+            // Add an object to the map
+            mapElements.put(position, element);
+        } else throw new IllegalArgumentException(element + " (" + element.getClass() + ") cannot be placed on position" + position);
+    }
+
+    @Override
+    public IMapElement objectAt(Vector2D position) {
+        return mapElements.get(position);
+    }
+
+    public boolean canMoveTo(Vector2D position) {
+        return (isOnMap(position) && !(objectAt(position) instanceof Animal));
+    }
+
+    public boolean isOccupied(Vector2D position) {
+        return mapElements.containsKey(position);
+    }
+
+    public IMapElement remove(Vector2D position) {
+        return mapElements.remove(position);
     }
 
     protected abstract boolean isOnMap(Vector2D position);

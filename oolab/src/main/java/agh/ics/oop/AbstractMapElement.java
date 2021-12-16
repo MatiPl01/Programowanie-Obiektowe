@@ -18,6 +18,7 @@ public abstract class AbstractMapElement implements IMapElement {
 
     @Override
     public void remove() {
+        System.out.println("=== NOTIFIED MapElementObserver to remove element from map ===");
         for (IPositionChangeObserver observer: observers) {
             // Element should be removed from a GUI when null is passed as a newPosition
             observer.positionChanged(position, null);

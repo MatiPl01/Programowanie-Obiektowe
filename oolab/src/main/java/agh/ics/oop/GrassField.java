@@ -23,7 +23,11 @@ public class GrassField extends AbstractWorldMap {
         // Check if an element will override a Grass object
         boolean overrodeGrass = objectAt(position) instanceof Grass;
         // Remove a grass object
-        if (overrodeGrass) objectAt(position).remove();
+        IMapElement grass = objectAt(position);
+        // Remove grass from the set of elements awaiting rendering
+        // if it hasn't been rendered before and was replaced by an animal
+        newMapElements.remove(grass);
+        if (overrodeGrass) grass.remove();
         super.place(element);
         // Update map boundary
         updateMapBounds(null, position);
@@ -57,7 +61,7 @@ public class GrassField extends AbstractWorldMap {
         // Respawn a grass object only if there is available space in which it can be respawned
         if (elementsCount <= maxGrassFieldIndex * maxGrassFieldIndex) {
             IMapElement grass = new Grass(getNextEmptyField(maxGrassFieldIndex, maxGrassFieldIndex));
-            place(grass);
+            placeNewMapElement(grass);
             updateMapBounds(null, grass.getPosition());
         }
     }

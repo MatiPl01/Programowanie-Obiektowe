@@ -10,6 +10,7 @@ import javafx.stage.Stage;
 import java.io.FileInputStream;
 
 public class App extends Application {
+    private static final int refreshDelay = 1000; // ms
     private static final int sceneHeight = 700;
     private static final int sceneWidth = 700;
     private static final IWorldMap map = new GrassField(10);
@@ -20,6 +21,7 @@ public class App extends Application {
         new Vector2D(5, 7),
     };
     MapGrid mapGrid = new MapGrid(map);
+    SimulationEngine engine;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -28,7 +30,7 @@ public class App extends Application {
 
         // Set up the simulation engine
         MoveDirection[] directions = OptionsParser.parse(getParameters().getRaw().toArray(new String[0]));
-        SimulationEngine engine = new SimulationEngine(this, directions, map, positions);
+        engine = new SimulationEngine(this, map, directions, positions);
         Thread engineThread = new Thread(engine);
 
         // Render grid
@@ -47,11 +49,15 @@ public class App extends Application {
         engineThread.start();
     }
 
-    public void update() {
-        // TODO - implement me
+    public int getRefreshDelay() {
+        return refreshDelay;
     }
 
     public static void init(String[] args) {
         Application.launch(App.class, args);
+    }
+
+    public void refresh() {
+        engine.requestNewFrame();
     }
 }

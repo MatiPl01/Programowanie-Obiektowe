@@ -10,6 +10,8 @@ public interface IElementBox {
 
     /**
      * Get node which is represented by a class implementing this interface
+     *
+     * @return The JavaFX scene Node
      */
     Node getNode();
 }

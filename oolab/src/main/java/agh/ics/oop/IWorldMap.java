@@ -1,6 +1,7 @@
 package agh.ics.oop;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * The interface responsible for interacting with the map of the world.
@@ -62,9 +63,19 @@ public interface IWorldMap {
     Vector2D getUpperRight();
 
     /**
-     * Return an object at a given position.
+     * Return a set of newly added map elements. After returning
+     * currently new elements, the set of new elements will be replaced
+     * by the empty set.
      *
-     * @return List of map objects pairs
+     * @return Set of map objects pairs
      */
-    List<IMapElement> getMapElements();
+    Set<IMapElement> getNewMapElements();
+
+    /**
+     * Return a list of newly added map elements. After returning
+     * currently new elements, the list of new elements will be cleared.
+     * @param element
+     *              The element newly added to the ma for the firs time.
+     */
+    void placeNewMapElement(IMapElement element);
 }

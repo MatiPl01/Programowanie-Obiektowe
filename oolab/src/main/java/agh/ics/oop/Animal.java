@@ -18,11 +18,13 @@ public class Animal extends AbstractMapElement {
     public Animal(IWorldMap map) {
         super(new Vector2D(0, 0));
         this.map = map;
+        addObserver((IPositionChangeObserver) map);
     }
 
     public Animal(IWorldMap map, Vector2D initialPosition) {
         super(initialPosition);
         this.map = map;
+        addObserver((IPositionChangeObserver) map);
     }
 
     @Override
@@ -40,24 +42,17 @@ public class Animal extends AbstractMapElement {
         return dirPath + imagesPaths.get(orientation);
     }
 
-    public MapDirection getOrientation() {
-        return orientation;
-    }
-
     public void move(MoveDirection direction) {
-        Vector2D newPosition;
+        Vector2D newPosition = position;
 
         switch (direction) {
             case RIGHT -> orientation = orientation.next();
             case LEFT -> orientation = orientation.previous();
-            case FORWARD -> {
-                newPosition = position.add(orientation.toUnitVector());
-                if (map.canMoveTo(newPosition)) changePosition(position, newPosition);
-            }
-            case BACKWARD -> {
-                newPosition = position.subtract(orientation.toUnitVector());
-                if (map.canMoveTo(newPosition)) changePosition(position, newPosition);
-            }
+            case FORWARD -> newPosition = position.add(orientation.toUnitVector());
+            case BACKWARD -> newPosition = position.subtract(orientation.toUnitVector());
+        }
+        if (position == newPosition || map.canMoveTo(newPosition)) {
+            changePosition(position, newPosition);
         }
     }
 

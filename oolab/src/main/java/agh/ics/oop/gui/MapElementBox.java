@@ -37,12 +37,15 @@ public class MapElementBox implements IPositionChangeObserver, IElementBox {
         this.node = new VBox(imageView, label);
         node.setAlignment(Pos.BASELINE_CENTER);
         addToGrid();
+        System.out.println("ADDED NEW GRID ELEMENT: " + element + ", at: " + grid.getCoordinates(element.getPosition()));
         element.addObserver(this);
     }
 
     @Override
     public void remove() {
-        grid.getGrid().getChildren().remove(imageView);
+        System.out.println("CALLED REMOVE IN MapElementBox for: " + element + ", at: " + grid.getCoordinates(element.getPosition()));
+        grid.getGrid().getChildren().remove(node);
+        grid.update(grid.getCoordinates(element.getPosition()), null);
     }
 
     @Override
@@ -50,15 +53,9 @@ public class MapElementBox implements IPositionChangeObserver, IElementBox {
         // Remove a map element if a newPosition is null
         if (newPosition == null) remove();
         else {
-            // Change image of an element
-            try { // TODO - improve error handling (do something better)
-                imageView.setImage(new Image(new FileInputStream(element.getImagePath())));
-                label.setText(getLabelText(element));
-            } catch (FileNotFoundException e) {
-                label.setText("cannot load image");
-            }
-
-            // TODO - respawn map element on a gui (in another place)
+            grid.update(grid.getCoordinates(oldPosition), grid.getCoordinates(newPosition));
+            // Change an image of the element
+            update();
         }
     }
 
@@ -67,7 +64,21 @@ public class MapElementBox implements IPositionChangeObserver, IElementBox {
         return node;
     }
 
+    public void update() {
+        System.out.println("==== UPDATE ====");
+        // TODO - improve error handling (do something better)
+        try {
+            Image image = new Image(new FileInputStream(element.getImagePath()));
+            imageView.setImage(image);
+            label.setText(getLabelText(element));
+            System.out.println("UPDATED: " + element.getImagePath() + ", orientation: " + element);
+        } catch (FileNotFoundException e) {
+            label.setText("cannot load image");
+        }
+    }
+
     private void addToGrid() {
+        System.out.println("ELEMENT " + element + " WAS SUCCESSFULLY ADDED TO GRID AT: " + grid.getCoordinates(element.getPosition()));
         Vector2D position = grid.getCoordinates(element.getPosition());
         int x = position.getX();
         int y = position.getY();
