@@ -28,10 +28,10 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
         return upperRight;
     }
 
-    public List<Pair<Vector2D, String>> getMapElements() {
-        List<Pair<Vector2D, String>> elementsList = new ArrayList<>();
+    public List<IMapElement> getMapElements() {
+        List<IMapElement> elementsList = new ArrayList<>();
         for (Vector2D key: mapElements.keySet()) {
-            elementsList.add(new Pair<>(key, mapElements.get(key).toString()));
+            elementsList.add(mapElements.get(key));
         }
         return elementsList;
     }
@@ -65,8 +65,10 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
     public void positionChanged(Vector2D oldPosition, Vector2D newPosition) {
         // Remove a map element from the old position
         IMapElement movedElement = remove(oldPosition);
-        // Add the removed map element to the new position
-        place(movedElement);
+        // Add the removed map element to the new position only if
+        // a newPosition is not null. If it is null, an element should
+        // not be added as it was removed from a map
+        if (newPosition != null) place(movedElement);
     }
 
     protected abstract boolean isOnMap(Vector2D position);

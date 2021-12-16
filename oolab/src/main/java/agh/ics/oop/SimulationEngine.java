@@ -4,7 +4,7 @@ import agh.ics.oop.gui.App;
 
 import java.util.ArrayList;
 
-public class SimulationEngine implements IEngine {
+public class SimulationEngine implements IEngine, Runnable {
     private final ArrayList<Animal> animals = new ArrayList<>();
     private final Vector2D[] positions;
     private final MoveDirection[] moves;
@@ -29,15 +29,16 @@ public class SimulationEngine implements IEngine {
 
     @Override
     public void run() {
-        for (int i = 0; i < moves.length; i++) {
-            int j = i % animals.size();
-            Animal animal = animals.get(j);
-
-            if (j == 0) System.out.println(map);
-            System.out.println("[j=" + j +  "] Moving animal: " + animal + " (" + animal.getPosition() + "). Move: " + moves[i]);
-
-            animal.move(moves[i]); // TODO - implement map refreshing
-            app.update();
-        }
+        System.out.println("Engine started");
+//        for (int i = 0; i < moves.length; i++) {
+//            int j = i % animals.size();
+//            Animal animal = animals.get(j);
+//
+//            if (j == 0) System.out.println(map);
+//            System.out.println("[j=" + j +  "] Moving animal: " + animal + " (" + animal.getPosition() + "). Move: " + moves[i]);
+//
+//            animal.move(moves[i]); // TODO - implement map refreshing
+//            app.update();
+//        }
     }
 }

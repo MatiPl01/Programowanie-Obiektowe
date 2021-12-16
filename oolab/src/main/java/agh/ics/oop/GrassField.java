@@ -22,6 +22,8 @@ public class GrassField extends AbstractWorldMap {
         if (objectAt(position) != element) elementsCount++;
         // Check if an element will override a Grass object
         boolean overrodeGrass = objectAt(position) instanceof Grass;
+        // Remove a grass object
+        if (overrodeGrass) objectAt(position).remove();
         super.place(element);
         // Update map boundary
         updateMapBounds(null, position);

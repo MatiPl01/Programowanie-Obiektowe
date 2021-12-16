@@ -47,9 +47,24 @@ public interface IWorldMap {
      */
     Object objectAt(Vector2D position);
 
+    /**
+     * Return an object at a given position.
+     *
+     * @return Vector representing coordinates of the lower left map corner
+     */
     Vector2D getLowerLeft();
 
+    /**
+     * Return an object at a given position.
+     *
+     * @return Vector representing coordinates of the lower left map corner
+     */
     Vector2D getUpperRight();
 
-    List<Pair<Vector2D, String>> getMapElements();
+    /**
+     * Return an object at a given position.
+     *
+     * @return List of map objects pairs
+     */
+    List<IMapElement> getMapElements();
 }

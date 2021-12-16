@@ -1,34 +1,31 @@
 package agh.ics.oop;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
 
-public class Animal implements IMapElement {
+public class Animal extends AbstractMapElement {
+    private static final String dirPath = "src/main/resources/images/animals/";
+    private static final Map<MapDirection, String> imagesPaths = new HashMap<>() {{
+        put(MapDirection.NORTH, "cow-north.png");
+        put(MapDirection.SOUTH, "cow-south.png");
+        put(MapDirection.EAST, "cow-east.png");
+        put(MapDirection.WEST, "cow-west.png");
+    }};
+
     private MapDirection orientation = MapDirection.NORTH;
-    private Vector2D position;
     private final IWorldMap map;
-    private final Set<IPositionChangeObserver> observers = new HashSet<>(){};
 
     public Animal(IWorldMap map) {
+        super(new Vector2D(0, 0));
         this.map = map;
-        addObserver((IPositionChangeObserver) map);
-        position = new Vector2D(0, 0);
     }
 
     public Animal(IWorldMap map, Vector2D initialPosition) {
+        super(initialPosition);
         this.map = map;
-        addObserver((IPositionChangeObserver) map);
-        position = initialPosition;
     }
 
-    public Vector2D getPosition() {
-        return position;
-    }
-
-    public MapDirection getOrientation() {
-        return orientation;
-    }
-
+    @Override
     public String toString() {
         return switch(orientation) {
             case NORTH -> "N";
@@ -38,8 +35,13 @@ public class Animal implements IMapElement {
         };
     }
 
-    public boolean isAt(Vector2D position) {
-        return this.position.equals(position);
+    @Override
+    public String getImagePath() {
+        return dirPath + imagesPaths.get(orientation);
+    }
+
+    public MapDirection getOrientation() {
+        return orientation;
     }
 
     public void move(MoveDirection direction) {
@@ -61,18 +63,6 @@ public class Animal implements IMapElement {
 
     void changePosition(Vector2D oldPosition, Vector2D newPosition) {
         position = newPosition;
-        positionChanged(oldPosition, newPosition);
-    }
-
-    void addObserver(IPositionChangeObserver observer) {
-        observers.add(observer);
-    }
-
-    void removeObserver(IPositionChangeObserver observer) {
-        observers.remove(observer);
-    }
-
-    void positionChanged(Vector2D oldPosition, Vector2D newPosition) {
         for (IPositionChangeObserver observer: observers) {
             observer.positionChanged(oldPosition, newPosition);
         }
